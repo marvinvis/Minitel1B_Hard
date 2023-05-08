@@ -43,6 +43,15 @@ Minitel::Minitel(HardwareSerial& serial) : mySerial(serial) {
 }
 /*--------------------------------------------------------------------*/
 
+#if defined(ESP32) || defined(ARDUINO_ARCH_ESP32)
+Minitel::Minitel(HardwareSerial& serial, int8_t rxPin, int8_t txPin) : mySerial(serial) {
+  // A la mise sous tension du Minitel, la vitesse des échanges entre
+  // le Minitel et le périphérique est de 1200 bauds par défaut.
+  mySerial.begin(1200, SERIAL_7E1, rxPin, txPin);
+}
+#endif
+/*--------------------------------------------------------------------*/
+
 void Minitel::writeByte(byte b) {
   // Cette fonction servait à ajouter le bit de parité pour la communication avec le minitel
   // Cela se fait désormais avec l'option SERIAL_7E1 de la fonction begin.
