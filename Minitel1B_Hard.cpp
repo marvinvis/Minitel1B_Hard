@@ -175,10 +175,11 @@ int Minitel::changeSpeed(int bauds) {  // Voir p.141
   }
   #if defined(ESP32) || defined(ARDUINO_ARCH_ESP32)
   mySerial.flush(false); // Patch pour Arduino-ESP32 (still needed for v2.0.8)
+  mySerial.updateBaudRate(bauds);
   #else
   mySerial.end();
-  #endif
   mySerial.begin(bauds, SERIAL_7E1);
+  #endif
   // Acquittement
   return workingSpeed();  // En bauds (voir section Private ci-dessous)
 }
