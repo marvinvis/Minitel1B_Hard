@@ -1120,11 +1120,13 @@ void Minitel::writeBytesPRO(int n) {  // Voir p.134
 
 unsigned long Minitel::identificationBytes() {  // Voir p.138
   while (!mySerial);  // On attend que le port soit sur écoute.
+  unsigned long time = millis();
   unsigned long trame = 0;  // 32 bits = 4 octets
   while (trame >> 24 != 0x01) {  // La trame doit débuter par SOH (0x01)
     if (mySerial.available() > 0) {
       trame = (trame << 8) + readByte();
     }
+    if (millis() - time > 1000) return 0; // On se donne 1000ms pour obtenir la réponse
   }
   while (!mySerial.available()>0); // Indispensable
   if (readByte() != 0x04) return 0;  // La trame doit se terminer par EOT (0x04)
