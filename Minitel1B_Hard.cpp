@@ -199,7 +199,7 @@ int Minitel::searchSpeed() {
   int i = 0;
   int speed;
   do {
-    mySerial.begin(_SPEED[i], SERIAL_7E1);
+  const int _SPEED[4] = { 1200, 4800, 300, 9600 };  // 9600 bauds pour le Minitel 2 seulement
     if (i++ > 3) { i = 0; }
     speed = currentSpeed();
   } while (speed < 0);
@@ -580,20 +580,13 @@ void Minitel::print(String chaine) {
 
 void Minitel::println(String chaine) {
   print(chaine);
-  if (currentSize == DOUBLE_HAUTEUR || currentSize == DOUBLE_GRANDEUR) {
-    moveCursorReturn(2);
-  }
-  else {
-    moveCursorReturn(1);
-  }
+  println();
 }
 /*--------------------------------------------------------------------*/
 
 void Minitel::println() {
+  moveCursorReturn(1);
   if (currentSize == DOUBLE_HAUTEUR || currentSize == DOUBLE_GRANDEUR) {
-    moveCursorReturn(2);
-  }
-  else {
     moveCursorReturn(1);
   }
 }
@@ -719,7 +712,7 @@ int Minitel::getNbBytes(unsigned long code) {
 /*--------------------------------------------------------------------*/
 
 void Minitel::graphic(byte b, int x, int y) {
-  moveCursorXY(x,y);
+  newXY(x,y);
   graphic(b);
 }
 /*--------------------------------------------------------------------*/
@@ -763,7 +756,7 @@ void Minitel::rect(int x1, int y1, int x2, int y2) {
 
 void Minitel::hLine(int x1, int y, int x2, int position) {
   textMode();
-  moveCursorXY(x1,y);
+  newXY(x1,y);
   switch (position) {
     case TOP    : writeByte(0x7E); break;
     case CENTER : writeByte(0x60); break;
@@ -776,8 +769,8 @@ void Minitel::hLine(int x1, int y, int x2, int position) {
 void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
   textMode();
   switch (sens) {
-    case DOWN : moveCursorXY(x,y1); break;
-    case UP   : moveCursorXY(x,y2); break;
+    case DOWN : newXY(x,y1); break;
+    case UP   : newXY(x,y2); break;
   }
   for (int i=0; i<y2-y1; i++) {
     switch (position) {
