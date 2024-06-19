@@ -195,10 +195,11 @@ int Minitel::currentSpeed() {  // Voir p.141
 /*--------------------------------------------------------------------*/
 
 int Minitel::searchSpeed() {
-  mySerial.begin(_SPEED[i], SERIAL_7E1);  int i = 0;
-  int speed;
-  do {
   const int _SPEED[4] = { 1200, 4800, 300, 9600 };  // 9600 bauds pour le Minitel 2 seulement
+  int i = 0;
+	int speed;
+  do {
+    mySerial.begin(_SPEED[i], SERIAL_7E1);
     if (i++ > 3) { i = 0; }
     speed = currentSpeed();
   } while (speed < 0);
