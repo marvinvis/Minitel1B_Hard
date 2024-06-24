@@ -200,7 +200,7 @@ int Minitel::searchSpeed() {
   int speed;
   do {
     mySerial.begin(_SPEED[i], SERIAL_7E1);
-    if (i++ > 3) { i = 0; }
+    if (++i > 3) { i = 0; }
     speed = currentSpeed();
   } while (speed < 0);
   return speed;  // En bauds
